@@ -2,7 +2,7 @@
 {
     public enum PetKind
     {
-        Cat, Dog, Fish
+        Cat, Dog, Fish, Bird
     }
 
     public class Pet

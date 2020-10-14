@@ -1,48 +1,25 @@
-﻿@model IEnumerable<Person>
-
-@{
-    ViewData["Title"] = "Index";
+﻿@{
+    ViewData["Title"] = "Pet Search";
 }
 
-<h1>Index</h1>
+<form asp-action="Search">
+    <label for="name">Search:</label>
+    <input type="text" id="name" name="name"><br><br>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Age)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Gender)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Age)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Gender)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <label>Filter By:</label>
+    <select name="location" id="location">
+        <option value="ignore" selected="selected"></option>
+        <option value="mel">Melbourne</option>
+        <option value="syd">Sydney</option>
+    </select>
+    &nbsp;
+    <select name="type" id="type">
+        <option value="ignore" selected="selected"></option>
+        <option value="bird">Bird</option>
+        <option value="cat">Cat</option>
+        <option value="dog">Dog</option>
+        <option value="fish">Fish</option>
+    </select>
+
+    <input type="submit" value="Submit">
+</form>

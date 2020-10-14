@@ -18,7 +18,22 @@ namespace PetFinderWeb
 
         public async Task<IActionResult> IndexAsync()
         {
-            var pf = new PetFinderCore.PetFinder(new PetFinderCore.PetFinderRepositoryClient("https://dorsavicodechallenge.azurewebsites.net/Melbourne"));
+            return View();
+        }
+
+        public async Task<IActionResult> SearchAsync(string name, string location, string type)
+        {
+            PetFinderCore.PetFinder pf = new PetFinderCore.PetFinder(new PetFinderCore.PetFinderRepositoryClient("https://dorsavicodechallenge.azurewebsites.net/Melbourne"));
+
+            switch (location)
+            {
+                case "syd":
+                    pf = new PetFinderCore.PetFinder(new PetFinderCore.PetFinderRepositoryClient("https://dorsavicodechallenge.azurewebsites.net/Sydney"));
+                    break;
+
+                default:
+                    break;
+            }
             var people = (await pf.GetPeopleAsync()).Select(p => new Models.Person { Age = p.Age, Gender = p.Gender, Name = p.Name });
             return View(people);
         }
