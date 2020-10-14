@@ -10,39 +10,25 @@
         pet.Type
     }));
 
+}
+@foreach (var g in new[] { PetFinderCore.Gender.Female, PetFinderCore.Gender.Male })
+{
+    <h3>@Html.DisplayFor(modelItem => g)</h3>
+    <ul>
+        @foreach (var item in y.Where(x => x.Gender == g))
+        {
+            <li>
+                <b>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </b>
+                <span>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </span>
+                <span>
+                    @Html.DisplayFor(modelItem => item.Location)
+                </span>
+            </li>
+        }
+    </ul>
 
 }
-<h3>female</h3>
-<ul>
-    @foreach (var item in y.Where(x => x.Gender == PetFinderCore.Gender.Female))
-    {
-        <li>
-            <b>
-                @Html.DisplayFor(modelItem => item.Name)
-            </b>
-            <span>
-                @Html.DisplayFor(modelItem => item.Type)
-            </span>
-            <span>
-                @Html.DisplayFor(modelItem => item.Location)
-            </span>
-        </li>
-    }
-</ul>
-<h3>Male</h3>
-<ul>
-    @foreach (var item in y.Where(x => x.Gender == PetFinderCore.Gender.Male))
-    {
-        <li>
-            <b>
-                @Html.DisplayFor(modelItem => item.Name)
-            </b>
-            <span>
-                @Html.DisplayFor(modelItem => item.Type)
-            </span>
-            <span>
-                @Html.DisplayFor(modelItem => item.Location)
-            </span>
-        </li>
-    }
-</ul>
