@@ -57,7 +57,30 @@ namespace PetFinderWeb
                 results.AddRange((await petFinder.GetPeopleAsync(city)).Select(p => mapper.Map<Models.Person>(p)));
             }
 
-            return View(results);
+            return View(InjectHumanReadableCityNames(results));
+        }
+
+        internal IEnumerable<Models.Person> InjectHumanReadableCityNames(List<Models.Person> people)
+        {
+            foreach (var person in people)
+            {
+                var city = person.Location;
+                switch (city)
+                {
+                    case "mel":
+                        city = "Melbourne";
+                        break;
+
+                    case "syd":
+                        city = "Sydney";
+                        break;
+
+                    default:
+                        break;
+                }
+                person.Location = city;
+                yield return person;
+            }
         }
     }
 }

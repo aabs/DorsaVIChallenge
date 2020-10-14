@@ -28,6 +28,10 @@ namespace PetFinderCore
             {
                 results = results.Where(p => p.Name == name);
             }
+            foreach (var r in results)
+            {
+                r.Location = fromLocation;
+            }
             return results.ToList();
         }
 

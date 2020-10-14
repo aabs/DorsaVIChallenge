@@ -2,59 +2,47 @@
 
 @{
     ViewData["Title"] = "List";
+    var y = Model.SelectMany(person => person.Pets?.Select(pet => new
+    {
+        person.Gender,
+        person.Location,
+        pet.Name,
+        pet.Type
+    }));
+
+
 }
-
-<h1>List</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Age)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Gender)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            var y = Model.SelectMany(person => person.Pets?.Select(pet => new
-            {
-                person.Gender,
-                person.Location,
-                pet.Name,
-                pet.Type
-            }));
-            var x = from pp in y
-                    group pp by pp.Gender into genders
-                    orderby genders.Key
-                    select genders;
-
-        }
-        @foreach (var gender in x)
-            @foreach (var item in gender)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Gender)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                    </td>
-                </tr>
-            }
-    </tbody>
-</table>
+<h3>female</h3>
+<ul>
+    @foreach (var item in y.Where(x => x.Gender == PetFinderCore.Gender.Female))
+    {
+        <li>
+            <b>
+                @Html.DisplayFor(modelItem => item.Name)
+            </b>
+            <span>
+                @Html.DisplayFor(modelItem => item.Type)
+            </span>
+            <span>
+                @Html.DisplayFor(modelItem => item.Location)
+            </span>
+        </li>
+    }
+</ul>
+<h3>Male</h3>
+<ul>
+    @foreach (var item in y.Where(x => x.Gender == PetFinderCore.Gender.Male))
+    {
+        <li>
+            <b>
+                @Html.DisplayFor(modelItem => item.Name)
+            </b>
+            <span>
+                @Html.DisplayFor(modelItem => item.Type)
+            </span>
+            <span>
+                @Html.DisplayFor(modelItem => item.Location)
+            </span>
+        </li>
+    }
+</ul>

@@ -6,8 +6,8 @@ namespace PetFinderCore
     {
         public uint Age { get; set; }
         public Gender Gender { get; set; }
+        public string Location { get; set; }
         public string Name { get; set; }
-
         public IEnumerable<Pet> Pets { get; set; }
     }
 }
