@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -37,7 +38,7 @@ namespace PetFinderWeb
             return View();
         }
 
-        public async Task<IActionResult> SearchAsync(string name, string location, string type)
+        public async Task<IActionResult> SearchAsync(string name, string location, string petKind)
         {
             var endpointsToQuery = new List<string>();
 
@@ -54,7 +55,12 @@ namespace PetFinderWeb
 
             foreach (var city in endpointsToQuery)
             {
-                results.AddRange((await petFinder.GetPeopleAsync(city)).Select(p => mapper.Map<Models.Person>(p)));
+                PetKind? kind = null;
+                if (!string.IsNullOrWhiteSpace(petKind) && petKind != "ignore")
+                {
+                    kind = (PetKind?)Enum.Parse(typeof(PetKind), petKind);
+                }
+                results.AddRange((await petFinder.GetPeopleAsync(city, name: name, kind: kind)).Select(p => mapper.Map<Models.Person>(p)));
             }
 
             return View(InjectHumanReadableCityNames(results));
