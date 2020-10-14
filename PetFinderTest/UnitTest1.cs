@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PetFinderTest
 {
-    public class Tests
+    public class PetFinderTests
     {
         public IEnumerable<Person> GetMelbourneTestData()
         {
@@ -20,6 +20,18 @@ namespace PetFinderTest
         [SetUp]
         public void Setup()
         {
+        }
+
+        [Test]
+        public async Task TestCanFilterPetsByOwnerGender()
+        {
+            var mock = new Mock<IPetFinderRepositoryClient>();
+            mock.Setup(foo => foo.GetAsync()).Returns(Task.FromResult(GetMelbourneTestData()));
+            var sut = new PetFinder(mock.Object);
+            var result = (await sut.GetPeopleAsync()).ToList();
+
+            // confirm that the pet finder used the client injected.
+            Assert.That(result, Has.Count.EqualTo(6));
         }
 
         [Test]

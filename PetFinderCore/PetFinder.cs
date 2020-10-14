@@ -13,9 +13,22 @@ namespace PetFinderCore
             this.client = client;
         }
 
-        public async Task<IEnumerable<Person>> GetPeopleAsync()
+        public async Task<IEnumerable<Person>> GetPeopleAsync(int? age = null, Gender? gender = null, string name = null)
         {
-            return (await client.GetAsync());
+            var results = (await client.GetAsync()).AsQueryable();
+            if (age.HasValue)
+            {
+                results = results.Where(p => p.Age == age.Value);
+            }
+            if (gender.HasValue)
+            {
+                results = results.Where(p => p.Gender == gender.Value);
+            }
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                results = results.Where(p => p.Name == name);
+            }
+            return results.ToList();
         }
 
         public async Task<IEnumerable<Pet>> GetPetsAsync()
