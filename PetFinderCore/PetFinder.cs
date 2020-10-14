@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace PetFinderCore
 {
-    public class PetFinder
+    public class PetFinder : IPetFinder
     {
         private readonly IPetFinderRepositoryClient client;
 
@@ -13,9 +13,9 @@ namespace PetFinderCore
             this.client = client;
         }
 
-        public async Task<IEnumerable<Person>> GetPeopleAsync(int? age = null, Gender? gender = null, string name = null)
+        public async Task<IEnumerable<Person>> GetPeopleAsync(string fromLocation, int? age = null, Gender? gender = null, string name = null)
         {
-            var results = (await client.GetAsync()).AsQueryable();
+            var results = (await client.GetAsync(fromLocation)).AsQueryable();
             if (age.HasValue)
             {
                 results = results.Where(p => p.Age == age.Value);
@@ -31,9 +31,9 @@ namespace PetFinderCore
             return results.ToList();
         }
 
-        public async Task<IEnumerable<Pet>> GetPetsAsync()
+        public async Task<IEnumerable<Pet>> GetPetsAsync(string fromLocation)
         {
-            var people = await client.GetAsync();
+            var people = await client.GetAsync(fromLocation);
             return people.SelectMany(p => p.Pets ?? new Pet[] { });
         }
     }

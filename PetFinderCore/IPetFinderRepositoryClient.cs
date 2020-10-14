@@ -5,6 +5,6 @@ namespace PetFinderCore
 {
     public interface IPetFinderRepositoryClient
     {
-        Task<IEnumerable<Person>> GetAsync();
+        Task<IEnumerable<Person>> GetAsync(string fromLocation);
     }
 }

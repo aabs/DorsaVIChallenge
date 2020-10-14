@@ -8,19 +8,21 @@ namespace PetFinderCore
 {
     public class PetFinderRepositoryClient : IPetFinderRepositoryClient
     {
-        private readonly string endpointUri;
+        private readonly IEndpointProvider endpointProvider;
 
-        public PetFinderRepositoryClient(string endpointUri)
+        public PetFinderRepositoryClient(IEndpointProvider endpointProvider)
         {
-            this.endpointUri = endpointUri;
+            this.endpointProvider = endpointProvider;
         }
 
-        public async Task<IEnumerable<Person>> GetAsync()
+        public string EndpointName { get; set; }
+
+        public async Task<IEnumerable<Person>> GetAsync(string fromLocation)
         {
             HttpClient client = new HttpClient();
             try
             {
-                string responseBody = await client.GetStringAsync(endpointUri);
+                string responseBody = await client.GetStringAsync(endpointProvider.Endpoints[fromLocation]);
                 List<Person> result = JsonConvert.DeserializeObject<List<Person>>(responseBody);
                 return result;
             }
