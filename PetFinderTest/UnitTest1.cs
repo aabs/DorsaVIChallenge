@@ -1,3 +1,4 @@
+using FluentAssertions;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -35,11 +36,74 @@ namespace PetFinderTest
         }
 
         [Test]
+        public async Task TestCanGetByAgePeople()
+        {
+            var mock = new Mock<IPetFinderRepositoryClient>();
+            mock.Setup(foo => foo.GetAsync()).Returns(Task.FromResult(GetMelbourneTestData()));
+            var sut = new PetFinder(mock.Object);
+            var result = (await sut.GetPeopleAsync(age: 18)).ToList();
+
+            // confirm that the pet finder used the client injected.
+            result.Should().HaveCount(1);
+            result.ElementAt(0).Name.Should().Be("Jennifer");
+        }
+
+        [Test]
+        public async Task TestCanGetOnlyFemalePeople()
+        {
+            var mock = new Mock<IPetFinderRepositoryClient>();
+            mock.Setup(foo => foo.GetAsync()).Returns(Task.FromResult(GetMelbourneTestData()));
+            var sut = new PetFinder(mock.Object);
+            var result = (await sut.GetPeopleAsync(gender: Gender.Female)).ToList();
+
+            // confirm that the pet finder used the client injected.
+            Assert.That(result, Has.Count.EqualTo(3));
+        }
+
+        [Test]
+        public async Task TestCanGetOnlyMalePeople()
+        {
+            var mock = new Mock<IPetFinderRepositoryClient>();
+            mock.Setup(foo => foo.GetAsync()).Returns(Task.FromResult(GetMelbourneTestData()));
+            var sut = new PetFinder(mock.Object);
+            var result = (await sut.GetPeopleAsync(gender: Gender.Female)).ToList();
+
+            // confirm that the pet finder used the client injected.
+            Assert.That(result, Has.Count.EqualTo(3));
+        }
+
+        [Test]
+        public async Task TestCanRetrievePeopleByNameAsync()
+        {
+            var mock = new Mock<IPetFinderRepositoryClient>();
+            mock.Setup(foo => foo.GetAsync()).Returns(Task.FromResult(GetMelbourneTestData()));
+            var sut = new PetFinder(mock.Object);
+            var result = (await sut.GetPeopleAsync(name: "Bob")).Single();
+
+            // confirm that the pet finder used the client injected.
+            result.Should().Be(1);
+            result.Name.Should().Be("Bob");
+            result.Age.Should().Be(23);
+        }
+
+        [Test]
         public async Task TestConnectivityToMelbourneEndpoint()
         {
             var sut = new PetFinderRepositoryClient("https://dorsavicodechallenge.azurewebsites.net/Melbourne");
             var people = await sut.GetAsync();
             Assert.That(people, Has.Count.EqualTo(6));
+        }
+
+        [Test]
+        public async Task TestGetNoIndeterminatePeople()
+        {
+            var mock = new Mock<IPetFinderRepositoryClient>();
+            mock.Setup(foo => foo.GetAsync()).Returns(Task.FromResult(GetMelbourneTestData()));
+            var sut = new PetFinder(mock.Object);
+            var result = (await sut.GetPeopleAsync(gender: Gender.DeclinedToSay)).ToList();
+
+            // confirm that the pet finder used the client injected.
+            Assert.That(result, Has.Count.EqualTo(0));
         }
 
         [Test]
