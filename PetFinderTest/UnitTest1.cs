@@ -81,7 +81,7 @@ namespace PetFinderTest
             var result = (await sut.GetPeopleAsync(name: "Bob")).Single();
 
             // confirm that the pet finder used the client injected.
-            result.Should().Be(1);
+            result.Should().NotBeNull();
             result.Name.Should().Be("Bob");
             result.Age.Should().Be(23);
         }
